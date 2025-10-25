@@ -1,0 +1,74 @@
+<div class="container mt-4">
+  <h2 class="text-center">
+    <fa-icon [icon]="faCartPlus"></fa-icon> Create Sales (Dhanmondi)
+  </h2>
+  <form [formGroup]="salesForm" (ngSubmit)="createSales()">
+    <div class="form-group">
+      <label><fa-icon [icon]="faUser"></fa-icon> Customer Name</label>
+      <input formControlName="customername" class="form-control" placeholder="Customer Name" required>
+    </div>
+    <div class="form-group col-md-4">
+      <label><fa-icon [icon]="faCalendarAlt"></fa-icon> Sales Date</label>
+      <input formControlName="salesdate" type="date" class="form-control" readonly required>
+    </div>
+
+    <div formArrayName="products" class="mt-4">
+      <div class="row font-weight-bold">
+        <div class="col-md-3"><fa-icon [icon]="faTags"></fa-icon> Category</div>
+        <div class="col-md-3"><fa-icon [icon]="faBox"></fa-icon> Product</div>
+        <div class="col-md-2"><fa-icon [icon]="faSortNumericDown"></fa-icon> Qty</div>
+        <div class="col-md-2"><fa-icon [icon]="faDollarSign"></fa-icon> Unit Price</div>
+        <div class="col-md-2"><fa-icon [icon]="faWarehouse"></fa-icon> Stock</div>
+      </div>
+
+      <div *ngFor="let row of productsArray.controls; let i = index" [formGroupName]="i" class="border p-2 rounded mb-3">
+        <div class="row">
+          <div class="col-md-3">
+            <select class="form-control" formControlName="category" (change)="onCategoryChange(i)">
+              <option [ngValue]="null">Select Category</option>
+              <option *ngFor="let cat of categories" [ngValue]="cat.id">{{ cat.categoryname }}</option>
+            </select>
+          </div>
+
+          <div class="col-md-3">
+            <select class="form-control" formControlName="name">
+              <option value="">Select Product</option>
+              <option *ngFor="let prod of getFilteredProducts(i)" [value]="prod.name">{{ prod.name }}</option>
+            </select>
+          </div>
+
+          <div class="col-md-2">
+            <input formControlName="quantity" type="number" class="form-control" min="1" placeholder="Qty">
+          </div>
+
+          <div class="col-md-2">
+            <input formControlName="unitprice" type="number" class="form-control" readonly>
+          </div>
+
+          <div class="col-md-2">
+            <input formControlName="stock" type="number" class="form-control" readonly>
+          </div>
+        </div>
+        <div class="mt-2">
+          <label>Expiry Date</label>
+          <input formControlName="expiryDate" class="form-control" readonly>
+        </div>
+        <div class="mt-2 d-flex justify-content-between">
+          <button type="button" class="btn btn-danger" (click)="removeProductRow(i)">
+            <fa-icon [icon]="faTrash"></fa-icon> Remove
+          </button>
+          <button type="button" class="btn btn-primary" (click)="addProductRow()">
+            <fa-icon [icon]="faPlus"></fa-icon> Add Row
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group col-md-3 mt-3">
+      <label><fa-icon [icon]="faDollarSign"></fa-icon> Total Price</label>
+      <input formControlName="totalprice" type="number" class="form-control" readonly>
+    </div>
+
+    <button type="submit" class="btn btn-success mt-3"> <fa-icon [icon]="faSave"></fa-icon> Create Sales</button>
+  </form>
+</div>
